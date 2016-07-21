@@ -11,7 +11,7 @@ import com.google.gson.TypeAdapter;
 import rx.functions.Func1;
 
 @AutoValue
-public abstract class Author {
+public abstract class Author implements Comparable<Author> {
 
     @ColumnName("_id")
     public abstract String id();
@@ -44,4 +44,8 @@ public abstract class Author {
     // any parameters the extension will implement it for you
     public abstract ContentValues toContentValues();
 
+    @Override
+    public int compareTo(Author author) {
+        return fullname().compareTo(author.fullname());
+    }
 }

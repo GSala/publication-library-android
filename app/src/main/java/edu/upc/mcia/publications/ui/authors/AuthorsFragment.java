@@ -4,16 +4,25 @@ package edu.upc.mcia.publications.ui.authors;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
+import edu.upc.mcia.publications.ui.DividerItemDecoration;
 import timber.log.Timber;
 
 /**
@@ -36,6 +45,7 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
         super.onCreate(savedInstanceState);
 
         mPresenter = new AuthorsPresenter();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -46,13 +56,13 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         mLayoutManager = new LinearLayoutManager(getContext());
+        mAdapter = new AuthorsAdapter();
+        mAdapter.setOnItemClickListener((v, author) -> Timber.d("Item clicked"));
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-
-        mAdapter = new AuthorsAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener((v, author) -> Timber.d("Item clicked"));
         return view;
     }
 
@@ -60,6 +70,16 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter.attachView(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.authors_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        RxSearchView.queryTextChanges(searchView)
+                .subscribe(query -> mAdapter.getFilter().filter(query));
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

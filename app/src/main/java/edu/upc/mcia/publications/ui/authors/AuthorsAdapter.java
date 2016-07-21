@@ -1,51 +1,40 @@
 package edu.upc.mcia.publications.ui.authors;
 
-import android.content.pm.PackageInfo;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
+import rx.Observable;
 
-public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHolder> implements View.OnClickListener {
+public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHolder> implements View.OnClickListener, Filterable {
 
     private static final String BASE_IMAGE_URL = "http://registros.mcia.upc.edu%s";
 
     private OnItemClickListener onItemClickListener;
 
-    private SortedList<Author> mDataset;
+    private ArrayList<Author> mOriginalData;
+    private ArrayList<Author> mFilteredData;
+    private AuthorFilter mFilter = new AuthorFilter();
 
     public AuthorsAdapter() {
-        mDataset = new SortedList<>(Author.class, new SortedListAdapterCallback<Author>(this) {
-            @Override
-            public int compare(Author o1, Author o2) {
-                return o1.fullname().compareTo(o2.fullname());
-            }
-
-            @Override
-            public boolean areContentsTheSame(Author oldItem, Author newItem) {
-                return oldItem.equals(newItem);
-            }
-
-            @Override
-            public boolean areItemsTheSame(Author item1, Author item2) {
-                return item1.equals(item2);
-            }
-        });
+        mOriginalData = new ArrayList<>();
+        mFilteredData = new ArrayList<>();
     }
 
     public void setData(List<Author> updates) {
-        mDataset.addAll(updates);
+        mOriginalData.addAll(updates);
     }
 
     // Create new views (invoked by the layout manager)
@@ -61,7 +50,7 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Get elements from dataset
-        Author author = mDataset.get(position);
+        Author author = mFilteredData.get(position);
 
         // Save position in tag and set onClickListener
         holder.root.setTag(author);
@@ -79,7 +68,7 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset != null ? mDataset.size() : 0;
+        return mFilteredData != null ? mFilteredData.size() : 0;
     }
 
 
@@ -92,6 +81,11 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return mFilter;
     }
 
     public interface OnItemClickListener {
@@ -113,6 +107,32 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
             secondaryText = (TextView) v.findViewById(R.id.textSecondary);
             image = (ImageView) v.findViewById(R.id.image);
         }
+    }
+
+    private class AuthorFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+            FilterResults results = new FilterResults();
+
+            final ArrayList<Author> newList = new ArrayList<>();
+            Observable.from(mOriginalData)
+                    .filter(author -> author.fullname().toLowerCase().contains(filterString))
+                    .toSortedList()
+                    .subscribe(filteredData -> newList.addAll(filteredData));
+
+            results.values = newList;
+            results.count = newList.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mFilteredData = (ArrayList<Author>) results.values;
+            notifyDataSetChanged();
+        }
+
     }
 
 }

@@ -50,6 +50,7 @@ dependencies {
     compile 'com.artemzin.rxjava:proguard-rules:1.1.7.0'
 
     compile 'com.jakewharton.timber:timber:4.1.2'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
 
     compile 'com.jonathanfinerty.once:once:1.0.3'
 
