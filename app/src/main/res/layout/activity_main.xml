@@ -6,8 +6,8 @@
     tools:context=".ui.MainActivity">
 
     <fragment
-        android:id="@+id/authorsFragment"
-        android:name="edu.upc.mcia.publications.ui.authors.AuthorsFragment"
+        android:id="@+id/publishersFragment"
+        android:name="edu.upc.mcia.publications.ui.publishers.PublishersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

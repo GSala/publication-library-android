@@ -47,12 +47,12 @@ public class AuthorsLocalDataSource {
 
     private void saveAuthor(Author a) {
         ContentValues values = a.toContentValues();
-        mDatabaseHelper.insert(AuthorEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_IGNORE);
+        mDatabaseHelper.insert(AuthorEntry.TABLE_NAME, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public void saveAuthors(List<Author> news) {
+    public void saveAuthors(List<Author> authors) {
         BriteDatabase.Transaction transaction = mDatabaseHelper.newTransaction();
-        for (Author n : news) {
+        for (Author n : authors) {
             saveAuthor(n);
         }
         transaction.markSuccessful();

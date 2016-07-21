@@ -1,29 +1,30 @@
-package edu.upc.mcia.publications.ui.authors;
+package edu.upc.mcia.publications.ui.publishers;
 
 import edu.upc.mcia.publications.data.DataManager;
 import edu.upc.mcia.publications.ui.BasePresenter;
 import rx.Subscription;
 
-public class AuthorsPresenter extends BasePresenter<AuthorsMvpView> {
+public class PublishersPresenter extends BasePresenter<PublishersMvpView> {
 
-    private Subscription mSubscription;
     private DataManager mDataManager;
 
-    public AuthorsPresenter() {
+    private Subscription mSubscription;
+
+    public PublishersPresenter() {
         mDataManager = DataManager.getInstance();
     }
 
     @Override
-    public void attachView(AuthorsMvpView mvpView) {
+    public void attachView(PublishersMvpView mvpView) {
         super.attachView(mvpView);
 
-        loadAuthors();
+        loadPublishers();
     }
 
-    private void loadAuthors() {
+    private void loadPublishers() {
         checkViewAttached();
-        mSubscription = mDataManager.getAuthors()
-                .subscribe(authors -> getMvpView().showAuthors(authors));
+        mSubscription = mDataManager.getPublishers()
+                .subscribe(pubs -> getMvpView().showPublishers(pubs));
     }
 
     @Override

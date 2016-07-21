@@ -1,59 +1,53 @@
-package edu.upc.mcia.publications.ui.authors;
+package edu.upc.mcia.publications.ui.publishers;
 
-import android.content.pm.PackageInfo;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import edu.upc.mcia.publications.R;
-import edu.upc.mcia.publications.data.model.Author;
+import edu.upc.mcia.publications.data.model.Publisher;
 
-public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHolder> implements View.OnClickListener {
-
-    private static final String BASE_IMAGE_URL = "http://registros.mcia.upc.edu%s";
+public class PublishersAdapter extends RecyclerView.Adapter<PublishersAdapter.ViewHolder> implements View.OnClickListener {
 
     private OnItemClickListener onItemClickListener;
 
-    private SortedList<Author> mDataset;
+    private SortedList<Publisher> mDataset;
 
-    public AuthorsAdapter() {
-        mDataset = new SortedList<>(Author.class, new SortedListAdapterCallback<Author>(this) {
+    public PublishersAdapter() {
+        mDataset = new SortedList<>(Publisher.class, new SortedListAdapterCallback<Publisher>(this) {
             @Override
-            public int compare(Author o1, Author o2) {
+            public int compare(Publisher o1, Publisher o2) {
                 return o1.fullname().compareTo(o2.fullname());
             }
 
             @Override
-            public boolean areContentsTheSame(Author oldItem, Author newItem) {
+            public boolean areContentsTheSame(Publisher oldItem, Publisher newItem) {
                 return oldItem.equals(newItem);
             }
 
             @Override
-            public boolean areItemsTheSame(Author item1, Author item2) {
+            public boolean areItemsTheSame(Publisher item1, Publisher item2) {
                 return item1.equals(item2);
             }
         });
     }
 
-    public void setData(List<Author> updates) {
+    public void setData(List<Publisher> updates) {
         mDataset.addAll(updates);
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AuthorsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+    public PublishersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_author, parent, false);
+                .inflate(R.layout.row_publisher, parent, false);
         return new ViewHolder(v);
     }
 
@@ -61,19 +55,18 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Get elements from dataset
-        Author author = mDataset.get(position);
+        Publisher publisher = mDataset.get(position);
 
         // Save position in tag and set onClickListener
-        holder.root.setTag(author);
+        holder.root.setTag(publisher);
         holder.root.setOnClickListener(this);
 
         // Replace contents of the view
-        holder.primaryText.setText(author.fullname());
-        holder.secondaryText.setText(author.email());
+        holder.name.setText(publisher.fullname());
+        holder.acronym.setText(publisher.acronym());
+        holder.type.setText("#" + publisher.type());
 
-        Glide.with(holder.root.getContext())
-                .load(String.format(BASE_IMAGE_URL, author.photo()))
-                .into(holder.image);
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -86,7 +79,7 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     @Override
     public void onClick(View v) {
         if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(v, (Author) v.getTag());
+            onItemClickListener.onItemClick(v, (Publisher) v.getTag());
         }
     }
 
@@ -95,23 +88,23 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View v, Author author);
+        void onItemClick(View v, Publisher author);
     }
 
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public View root;
-        public TextView primaryText;
-        public TextView secondaryText;
-        public ImageView image;
+        public TextView name;
+        public TextView acronym;
+        public TextView type;
 
         public ViewHolder(View v) {
             super(v);
             root = v.findViewById(R.id.root);
-            primaryText = (TextView) v.findViewById(R.id.textPrimary);
-            secondaryText = (TextView) v.findViewById(R.id.textSecondary);
-            image = (ImageView) v.findViewById(R.id.image);
+            name = (TextView) v.findViewById(R.id.name);
+            acronym = (TextView) v.findViewById(R.id.acronym);
+            type = (TextView) v.findViewById(R.id.type);
         }
     }
 
