@@ -1,0 +1,15 @@
+package edu.upc.mcia.publications.ui;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import edu.upc.mcia.publications.R;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+}
