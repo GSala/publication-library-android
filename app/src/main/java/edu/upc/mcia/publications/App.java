@@ -3,6 +3,7 @@ package edu.upc.mcia.publications;
 import android.app.Application;
 import android.content.Context;
 
+import jonathanfinerty.once.Once;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -16,6 +17,8 @@ public class App extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        Once.initialise(this);
     }
 
     public static Context getContext() {

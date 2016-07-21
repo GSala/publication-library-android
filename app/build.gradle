@@ -51,9 +51,13 @@ dependencies {
 
     compile 'com.jakewharton.timber:timber:4.1.2'
 
+    compile 'com.jonathanfinerty.once:once:1.0.3'
+
     provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
     apt "com.google.auto.value:auto-value:1.2"
     apt 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
+    apt 'com.gabrielittner.auto.value:auto-value-cursor:1.0.0-rc1'
+    compile 'com.gabrielittner.auto.value:auto-value-cursor-annotations:1.0.0-rc1'
 
     testCompile 'junit:junit:4.12'
 }
