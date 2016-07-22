@@ -2,7 +2,12 @@ package edu.upc.mcia.publications.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
+
+import java.util.Date;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -14,6 +19,10 @@ public class ApiManager {
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
+            .registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) ->
+                    new Date(json.getAsJsonPrimitive().getAsLong()))
+            .registerTypeAdapter(Date.class, (JsonSerializer<Date>) (src, typeOfSrc, context) ->
+                    src == null ? null : new JsonPrimitive(src.getTime()))
             .create();
 
     private static final Retrofit RETROFIT =

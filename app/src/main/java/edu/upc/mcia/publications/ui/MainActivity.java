@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.ui.authors.AuthorsFragment;
+import edu.upc.mcia.publications.ui.publications.PublicationsFragment;
 import edu.upc.mcia.publications.ui.publishers.PublishersFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     return new AuthorsFragment();
                 case 1:
-                    return new Fragment();
+                    return new PublicationsFragment();
                 case 2:
                     return new PublishersFragment();
                 default:

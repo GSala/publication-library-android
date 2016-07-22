@@ -31,6 +31,18 @@ public class DbHelper extends SQLiteOpenHelper {
                     PublisherEntry.COLUMN_ACRONYM + TEXT_TYPE +
                     " )";
 
+    private static final String SQL_CREATE_PUBLICATIONS_ENTRIES =
+            "CREATE TABLE " + PublicationEntry.TABLE_NAME + " (" +
+                    PublicationEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    PublicationEntry.COLUMN_AUTHORS + TEXT_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_DATE + NUMBER_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_PUBLISHER + TEXT_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_REFERENCE + TEXT_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_SCORE + NUMBER_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_SUMMARY + TEXT_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
+                    PublicationEntry.COLUMN_URL + TEXT_TYPE +
+                    " )";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,6 +51,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_AUTHOR_ENTRIES);
         db.execSQL(SQL_CREATE_PUBLISHER_ENTRIES);
+        db.execSQL(SQL_CREATE_PUBLICATIONS_ENTRIES);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -61,6 +74,18 @@ public class DbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_FULLNAME = "fullname";
         public static final String COLUMN_ACRONYM = "acronym";
+    }
+
+    public static final class PublicationEntry implements BaseColumns {
+        public static final String TABLE_NAME = "publications";
+        public static final String COLUMN_DATE = "publishDate";
+        public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_SUMMARY = "summary";
+        public static final String COLUMN_AUTHORS = "authors";
+        public static final String COLUMN_PUBLISHER = "publisher";
+        public static final String COLUMN_URL = "url";
+        public static final String COLUMN_REFERENCE = "reference";
+        public static final String COLUMN_SCORE = "score";
     }
 
 }

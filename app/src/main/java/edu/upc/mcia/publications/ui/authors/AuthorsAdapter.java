@@ -34,6 +34,7 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
     }
 
     public void setData(List<Author> updates) {
+        mOriginalData.clear();
         mOriginalData.addAll(updates);
     }
 
