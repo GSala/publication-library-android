@@ -1,16 +1,18 @@
 package edu.upc.mcia.publications.ui.authors;
 
-import edu.upc.mcia.publications.data.DataManager;
+import edu.upc.mcia.publications.data.repository.AuthorRepository;
 import edu.upc.mcia.publications.ui.BasePresenter;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class AuthorsPresenter extends BasePresenter<AuthorsMvpView> {
 
     private Subscription mSubscription;
-    private DataManager mDataManager;
+    private AuthorRepository mAuthorRepository;
 
     public AuthorsPresenter() {
-        mDataManager = DataManager.getInstance();
+        mAuthorRepository = AuthorRepository.getInstance();
     }
 
     @Override
@@ -22,7 +24,9 @@ public class AuthorsPresenter extends BasePresenter<AuthorsMvpView> {
 
     private void loadAuthors() {
         checkViewAttached();
-        mSubscription = mDataManager.getAuthors()
+        mSubscription = mAuthorRepository.findAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(authors -> getMvpView().showAuthors(authors));
     }
 

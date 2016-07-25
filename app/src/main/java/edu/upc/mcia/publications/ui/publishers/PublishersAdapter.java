@@ -23,7 +23,7 @@ public class PublishersAdapter extends RecyclerView.Adapter<PublishersAdapter.Vi
         mDataset = new SortedList<>(Publisher.class, new SortedListAdapterCallback<Publisher>(this) {
             @Override
             public int compare(Publisher o1, Publisher o2) {
-                return o1.fullname().compareTo(o2.fullname());
+                return o1.getFullname().compareTo(o2.getFullname());
             }
 
             @Override
@@ -62,9 +62,9 @@ public class PublishersAdapter extends RecyclerView.Adapter<PublishersAdapter.Vi
         holder.root.setOnClickListener(this);
 
         // Replace contents of the view
-        holder.name.setText(publisher.fullname());
-        holder.acronym.setText(publisher.acronym());
-        holder.type.setText("#" + publisher.type());
+        holder.name.setText(publisher.getFullname());
+        holder.acronym.setText(publisher.getAcronym());
+        holder.type.setText("#" + publisher.getType());
 
 
     }

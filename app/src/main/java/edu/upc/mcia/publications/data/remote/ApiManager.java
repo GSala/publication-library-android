@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
-import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 
 import java.util.Date;
 
@@ -18,7 +17,6 @@ public class ApiManager {
     public static final String API_BASE_URL = "http://registros.mcia.upc.edu/api/";
 
     private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
             .registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) ->
                     new Date(json.getAsJsonPrimitive().getAsLong()))
             .registerTypeAdapter(Date.class, (JsonSerializer<Date>) (src, typeOfSrc, context) ->
@@ -32,9 +30,9 @@ public class ApiManager {
                     .addConverterFactory(GsonConverterFactory.create(GSON))
                     .build();
 
-    private static final MciaService MCIA_SERVICE = RETROFIT.create(MciaService.class);
+    private static final RemoteApi MCIA_SERVICE = RETROFIT.create(RemoteApi.class);
 
-    public static MciaService getMciaService() {
+    public static RemoteApi getRemoteApi() {
         return MCIA_SERVICE;
     }
 }

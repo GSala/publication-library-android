@@ -28,7 +28,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         mDataset = new SortedList<>(Publication.class, new SortedListAdapterCallback<Publication>(this) {
             @Override
             public int compare(Publication o1, Publication o2) {
-                return o2.publishDate().compareTo(o1.publishDate());
+                return o2.getPublishDate().compareTo(o1.getPublishDate());
             }
 
             @Override
@@ -75,9 +75,9 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
                 .load("http://registros.mcia.upc.edu/photos/default.jpg")
                 .into(holder.image);
 
-        holder.title.setText(pub.title());
-        holder.subtitle.setText(pub.id()); // TODO - Fill with proper publisher data
-        holder.summary.setText(pub.summary());
+        holder.title.setText(pub.getTitle());
+        holder.subtitle.setText(pub.getId()); // TODO - Fill with proper publisher data
+        holder.summary.setText(pub.getSummary());
 
 
     }
@@ -101,7 +101,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
                 case R.id.author:
                     // TODO - Fill with proper Auhtor data
                     if (onAuthorClickListener != null) {
-                        onAuthorClickListener.onAuthorClick(v, Author.create("", "", "", ""));
+                        onAuthorClickListener.onAuthorClick(v, new Author());
                     }
                     break;
             }

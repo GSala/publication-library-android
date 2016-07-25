@@ -1,17 +1,20 @@
 package edu.upc.mcia.publications.ui.publications;
 
-import edu.upc.mcia.publications.data.DataManager;
+import edu.upc.mcia.publications.data.repository.PublicationRepository;
 import edu.upc.mcia.publications.ui.BasePresenter;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
-    private DataManager mDataManager;
+    private PublicationRepository mPublicationRepository;
 
     private Subscription mSubscription;
 
     public PublicationsPresenter() {
-        mDataManager = DataManager.getInstance();
+        mPublicationRepository = PublicationRepository.getInstance();
     }
 
     @Override
@@ -23,8 +26,11 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
     private void loadPublications() {
         checkViewAttached();
-        mSubscription = mDataManager.getPublications()
-                .subscribe(pubs -> getMvpView().showPublications(pubs));
+        mSubscription = mPublicationRepository.findAll()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(page -> getMvpView().showPublications(page.getContent())
+                        , error -> Timber.e(error, error.getMessage()));
     }
 
     @Override

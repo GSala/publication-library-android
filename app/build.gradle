@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
@@ -54,11 +53,7 @@ dependencies {
 
     compile 'com.jonathanfinerty.once:once:1.0.3'
 
-    provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
-    apt "com.google.auto.value:auto-value:1.2"
-    apt 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
-    apt 'com.gabrielittner.auto.value:auto-value-cursor:1.0.0-rc1'
-    compile 'com.gabrielittner.auto.value:auto-value-cursor-annotations:1.0.0-rc1'
+    provided "org.projectlombok:lombok:1.12.6"
 
     testCompile 'junit:junit:4.12'
 }
