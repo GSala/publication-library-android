@@ -15,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     public static final String API_BASE_URL = "http://registros.mcia.upc.edu/api/";
+    public static final String IMAGE_BASE_URL = "http://registros.mcia.upc.edu%s";
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) ->

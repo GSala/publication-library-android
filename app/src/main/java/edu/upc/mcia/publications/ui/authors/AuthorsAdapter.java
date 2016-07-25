@@ -16,11 +16,10 @@ import java.util.List;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
+import edu.upc.mcia.publications.data.remote.ApiManager;
 import rx.Observable;
 
 public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHolder> implements View.OnClickListener, Filterable {
-
-    private static final String BASE_IMAGE_URL = "http://registros.mcia.upc.edu%s";
 
     private OnItemClickListener onItemClickListener;
 
@@ -62,7 +61,8 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
         holder.secondaryText.setText(author.getEmail());
 
         Glide.with(holder.root.getContext())
-                .load(String.format(BASE_IMAGE_URL, author.getPhoto()))
+                .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))
+                .dontAnimate()
                 .into(holder.image);
     }
 

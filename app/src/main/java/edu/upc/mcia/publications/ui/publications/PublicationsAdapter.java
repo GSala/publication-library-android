@@ -3,6 +3,7 @@ package edu.upc.mcia.publications.ui.publications;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,11 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import edu.upc.mcia.publications.App;
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.model.Publication;
+import edu.upc.mcia.publications.data.remote.ApiManager;
 
 public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -61,22 +64,28 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Get elements from dataset
         Publication pub = mDataset.get(position);
+        Author author = pub.getAuthors().get(0);
 
         // Save position in tag and set onClickListener
-        holder.root.setTag(pub);
+        holder.publication.setTag(pub);
         holder.publication.setOnClickListener(this);
+        holder.author.setTag(author);
         holder.author.setOnClickListener(this);
 
         // Replace contents of the view
-        // TODO - Fill with proper author data
-        holder.primaryText.setText("Dummy Author");
-        holder.secondaryText.setText("+3 others");
+        holder.primaryText.setText(author.getFullname());
+        holder.secondaryText.setText(author.getEmail());
         Glide.with(holder.root.getContext())
-                .load("http://registros.mcia.upc.edu/photos/default.jpg")
+                .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))
+                .dontAnimate()
                 .into(holder.image);
 
         holder.title.setText(pub.getTitle());
-        holder.subtitle.setText(pub.getId()); // TODO - Fill with proper publisher data
+
+        String dateString = DateUtils.formatDateTime(App.getContext(),
+                pub.getPublishDate().getTime(),
+                DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
+        holder.subtitle.setText(pub.getPublisher().getAcronym() + "  -  " + dateString);
         holder.summary.setText(pub.getSummary());
 
 
@@ -99,9 +108,8 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
                     }
                     break;
                 case R.id.author:
-                    // TODO - Fill with proper Auhtor data
                     if (onAuthorClickListener != null) {
-                        onAuthorClickListener.onAuthorClick(v, new Author());
+                        onAuthorClickListener.onAuthorClick(v, (Author) v.getTag());
                     }
                     break;
             }
