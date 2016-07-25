@@ -7,5 +7,10 @@ import edu.upc.mcia.publications.ui.MvpView;
 
 public interface PublicationsMvpView extends MvpView {
 
-    void showPublications(List<Publication> pubs);
+    void addPublications(List<Publication> pubs);
+
+    void clearPublications(List<Publication> pubs);
+
+    void showLoadingIndicator(boolean show);
+
 }

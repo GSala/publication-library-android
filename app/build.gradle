@@ -28,6 +28,7 @@ android {
 dependencies {
     final SUPPORT_LIBRARY_VERSION = '24.1.0'
     final RETROFIT_VERSION = '2.1.0'
+    final RXBINDINGS_VERSION = '0.4.0'
 
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
@@ -49,7 +50,9 @@ dependencies {
     compile 'com.artemzin.rxjava:proguard-rules:1.1.7.0'
 
     compile 'com.jakewharton.timber:timber:4.1.2'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
+    compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$RXBINDINGS_VERSION"
+    compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RXBINDINGS_VERSION"
+    compile "com.jakewharton.rxbinding:rxbinding-support-v4:$RXBINDINGS_VERSION"
 
     compile 'com.jonathanfinerty.once:once:1.0.3'
 

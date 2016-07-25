@@ -8,6 +8,7 @@ import edu.upc.mcia.publications.data.remote.dto.Page;
 import edu.upc.mcia.publications.data.remote.dto.PublicationDto;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface RemoteApi {
@@ -25,6 +26,6 @@ public interface RemoteApi {
     Observable<Publisher> getPublisher(@Path("id") String id);
 
     @GET("publications")
-    Observable<Page<PublicationDto>> getPublications();
+    Observable<Page<PublicationDto>> getPublications(@Query("page") int pageNumber);
 
 }

@@ -46,8 +46,12 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         });
     }
 
-    public void setData(List<Publication> pubs) {
+    public void addData(List<Publication> pubs) {
         mDataset.addAll(pubs);
+    }
+
+    public void clearData(List<Publication> pubs) {
+        mDataset.clear();
     }
 
     // Create new views (invoked by the layout manager)

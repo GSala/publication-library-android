@@ -28,8 +28,8 @@ public class PublicationRepository {
         return INSTANCE;
     }
 
-    public Observable<Page<Publication>> findAll() {
-        return ApiManager.getRemoteApi().getPublications()
+    public Observable<Page<Publication>> search(int pageNumber) {
+        return ApiManager.getRemoteApi().getPublications(pageNumber)
                 .flatMap(this::fillPublication);
     }
 
