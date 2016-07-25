@@ -52,7 +52,8 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         mAdapter = new PublicationsAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener((v, pub) -> Timber.d("Item clicked"));
+        mAdapter.setOnPublicationClickListener((v, pub) -> Timber.d("Pub clicked"));
+        mAdapter.setOnAuthorClickListener((v, author) -> Timber.d("Author clicked"));
         return view;
     }
 

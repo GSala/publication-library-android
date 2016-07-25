@@ -14,11 +14,13 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import edu.upc.mcia.publications.R;
+import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.model.Publication;
 
 public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapter.ViewHolder> implements View.OnClickListener {
 
-    private OnItemClickListener onItemClickListener;
+    private OnPublicationClickListener onPublicationClickListener;
+    private OnAuthorClickListener onAuthorClickListener;
 
     private SortedList<Publication> mDataset;
 
@@ -62,7 +64,8 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
 
         // Save position in tag and set onClickListener
         holder.root.setTag(pub);
-        holder.root.setOnClickListener(this);
+        holder.publication.setOnClickListener(this);
+        holder.author.setOnClickListener(this);
 
         // Replace contents of the view
         // TODO - Fill with proper author data
@@ -88,23 +91,45 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
 
     @Override
     public void onClick(View v) {
-        if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(v, (Publication) v.getTag());
+        if (onPublicationClickListener != null) {
+            switch (v.getId()) {
+                case R.id.publication:
+                    if (onPublicationClickListener != null) {
+                        onPublicationClickListener.onItemClick(v, (Publication) v.getTag());
+                    }
+                    break;
+                case R.id.author:
+                    // TODO - Fill with proper Auhtor data
+                    if (onAuthorClickListener != null) {
+                        onAuthorClickListener.onAuthorClick(v, Author.create("", "", "", ""));
+                    }
+                    break;
+            }
         }
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setOnPublicationClickListener(OnPublicationClickListener onPublicationClickListener) {
+        this.onPublicationClickListener = onPublicationClickListener;
     }
 
-    public interface OnItemClickListener {
+    public void setOnAuthorClickListener(OnAuthorClickListener onAuthorClickListener) {
+        this.onAuthorClickListener = onAuthorClickListener;
+    }
+
+    public interface OnPublicationClickListener {
         void onItemClick(View v, Publication author);
+    }
+
+    public interface OnAuthorClickListener {
+        void onAuthorClick(View v, Author author);
     }
 
     // Provide a reference to the views for each data item
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public View root;
+        public View publication;
+        public View author;
         public TextView primaryText;
         public TextView secondaryText;
         public ImageView image;
@@ -115,6 +140,8 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         public ViewHolder(View v) {
             super(v);
             root = v.findViewById(R.id.root);
+            publication = v.findViewById(R.id.publication);
+            author = v.findViewById(R.id.author);
             primaryText = (TextView) v.findViewById(R.id.textPrimary);
             secondaryText = (TextView) v.findViewById(R.id.textSecondary);
             image = (ImageView) v.findViewById(R.id.image);

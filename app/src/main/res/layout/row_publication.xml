@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -15,35 +14,42 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/title"
+        <LinearLayout
+            android:id="@+id/publication"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            tools:text="Occupancy Forecasting for the Reduction of HVAC Energy Consumption in Smart Buildings" />
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            tools:text="ACRONYM - Tipus" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                tools:text="Occupancy Forecasting for the Reduction of HVAC Energy Consumption in Smart Buildings" />
 
-        <TextView
-            android:id="@+id/summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:padding="16dp"
-            tools:text="Should be some form of long text summarizing the article" />
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                tools:text="ACRONYM - Tipus" />
+
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:padding="16dp"
+                tools:text="Should be some form of long text summarizing the article" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -51,6 +57,7 @@
             android:background="#0c000000" />
 
         <FrameLayout
+            android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:foreground="?android:attr/selectableItemBackground">
