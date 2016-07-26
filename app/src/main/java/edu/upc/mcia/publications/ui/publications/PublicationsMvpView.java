@@ -13,4 +13,6 @@ public interface PublicationsMvpView extends MvpView {
 
     void showLoadingIndicator(boolean show);
 
+    void setPageIndicator(int pageNumber, int totalPages);
+
 }

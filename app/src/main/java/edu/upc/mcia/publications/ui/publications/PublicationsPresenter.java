@@ -14,6 +14,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     private Subscription mSubscription;
     private int totalPages;
     private int lastPageLoaded;
+    private int pageSize;
 
     public PublicationsPresenter() {
         mPublicationRepository = PublicationRepository.getInstance();
@@ -38,12 +39,21 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
                             getMvpView().addPublications(page.getContent());
                             totalPages = page.getMetadata().getTotalPages();
                             lastPageLoaded = pageNumber;
+                            pageSize = page.getMetadata().getSize();
                         }
                         , error -> Timber.e(error, error.getMessage()));
     }
 
-    public void onScrollReachedBottom() {
-        if (lastPageLoaded < totalPages - 1) {
+    public void onScroll(int lastVisibleItem, int totalItems) {
+        if (lastVisibleItem >= totalItems - 2) {
+            onScrollReachedBottom();
+        }
+        int pageNumber = lastVisibleItem / pageSize + 1;
+        getMvpView().setPageIndicator(pageNumber, totalPages);
+    }
+
+    private void onScrollReachedBottom() {
+        if (mSubscription.isUnsubscribed() && (lastPageLoaded < totalPages - 1)) {
             loadPublications(lastPageLoaded + 1);
         }
     }

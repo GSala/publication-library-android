@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
@@ -33,6 +34,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
 
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
+    private TextView mPageIndicator;
     private LinearLayoutManager mLayoutManager;
     private PublicationsAdapter mAdapter;
 
@@ -54,6 +56,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         View view = inflater.inflate(R.layout.fragment_publications, container, false);
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mPageIndicator = (TextView) view.findViewById(R.id.pageIndicator);
 
         mRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
@@ -79,21 +82,11 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
                 .subscribe(Void -> mPresenter.onRefreshRequested());
 
         RxRecyclerView.scrollEvents(mRecyclerView)
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .filter(e -> !mRefreshLayout.isRefreshing())
-                .subscribe(event -> {
-                    if (event.dy() > 0) //check for scroll down
-                    {
-                        int visibleItemCount = mLayoutManager.getChildCount();
-                        int totalItemCount = mLayoutManager.getItemCount();
-                        int pastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                            mPresenter.onScrollReachedBottom();
-                        }
-
-                    }
-                });
+                .throttleLast(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(p ->
+                        mPresenter.onScroll(mLayoutManager.findLastVisibleItemPosition()
+                                , mLayoutManager.getItemCount()));
 
     }
 
@@ -121,6 +114,11 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(RxSwipeRefreshLayout.refreshing(mRefreshLayout));
+    }
+
+    @Override
+    public void setPageIndicator(int pageNumber, int totalPages) {
+        mPageIndicator.setText(pageNumber + " / " + totalPages);
     }
 
 }
