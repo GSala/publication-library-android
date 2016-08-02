@@ -4,7 +4,7 @@ import edu.upc.mcia.publications.data.repository.PublicationQuery;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
-public class RxQuery {
+public class QueryManager {
 
     private final PublishSubject<PublicationQuery> mSubject = PublishSubject.create();
 
