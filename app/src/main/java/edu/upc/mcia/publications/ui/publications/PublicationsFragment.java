@@ -85,7 +85,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
                 .throttleLast(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(p ->
-                        mPresenter.onScroll(mLayoutManager.findLastVisibleItemPosition()
+                        mPresenter.onScroll(mLayoutManager.findFirstVisibleItemPosition()
                                 , mLayoutManager.getItemCount()));
 
     }

@@ -14,7 +14,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     private Subscription mSubscription;
     private int totalPages;
     private int lastPageLoaded;
-    private int pageSize;
+    private int totalPublications;
 
     public PublicationsPresenter() {
         mPublicationRepository = PublicationRepository.getInstance();
@@ -38,18 +38,17 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
                 .subscribe(page -> {
                             getMvpView().addPublications(page.getContent());
                             totalPages = page.getMetadata().getTotalPages();
+                            totalPublications = (int) page.getMetadata().getTotalElements();
                             lastPageLoaded = pageNumber;
-                            pageSize = page.getMetadata().getSize();
                         }
                         , error -> Timber.e(error, error.getMessage()));
     }
 
-    public void onScroll(int lastVisibleItem, int totalItems) {
-        if (lastVisibleItem >= totalItems - 2) {
+    public void onScroll(int firstVisibleItem, int totalItems) {
+        if (firstVisibleItem >= totalItems - 2) {
             onScrollReachedBottom();
         }
-        int pageNumber = lastVisibleItem / pageSize + 1;
-        getMvpView().setPageIndicator(pageNumber, totalPages);
+        getMvpView().setPageIndicator(firstVisibleItem + 1, totalPublications);
     }
 
     private void onScrollReachedBottom() {
