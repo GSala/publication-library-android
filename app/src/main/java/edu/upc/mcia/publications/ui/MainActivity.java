@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Authors";
+                    return getString(R.string.nav_authors);
                 case 1:
-                    return "Publications";
+                    return getString(R.string.nav_publications);
                 case 2:
-                    return "Publishers";
+                    return getString(R.string.nav_publishers);
                 default:
                     return "";
             }
