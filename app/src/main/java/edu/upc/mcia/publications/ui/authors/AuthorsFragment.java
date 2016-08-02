@@ -18,11 +18,9 @@ import android.view.ViewGroup;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
-import edu.upc.mcia.publications.ui.DividerItemDecoration;
 import timber.log.Timber;
 
 /**
@@ -74,7 +72,7 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.authors_menu, menu);
+        inflater.inflate(R.menu.menu_authors, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         RxSearchView.queryTextChanges(searchView)
