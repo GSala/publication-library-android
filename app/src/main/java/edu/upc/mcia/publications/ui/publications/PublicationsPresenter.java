@@ -11,7 +11,7 @@ import timber.log.Timber;
 public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
     private final PublicationRepository mPublicationRepository;
-    private final RxQuery mRxQuery;
+    private final QueryManager mQueryManager;
 
     private Subscription mSubscription;
     private int totalPages;
@@ -21,9 +21,9 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
     public PublicationsPresenter() {
         mPublicationRepository = PublicationRepository.getInstance();
-        mRxQuery = new RxQuery();
+        mQueryManager = new QueryManager();
 
-        mRxQuery.getObservable().subscribe(query -> {
+        mQueryManager.getObservable().subscribe(query -> {
             checkViewAttached();
             getMvpView().clearPublications();
             lastPageLoaded = -1;
@@ -36,7 +36,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     public void attachView(PublicationsMvpView mvpView) {
         super.attachView(mvpView);
 
-        loadPublications(0, mRxQuery.getQuery());
+        loadPublications(0, mQueryManager.getQuery());
     }
 
     private void loadPublications(int pageNumber, PublicationQuery query) {
@@ -67,7 +67,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
     private void onScrollReachedBottom() {
         if (mSubscription.isUnsubscribed() && (lastPageLoaded < totalPages - 1)) {
-            loadPublications(lastPageLoaded + 1, mRxQuery.getQuery());
+            loadPublications(lastPageLoaded + 1, mQueryManager.getQuery());
         }
     }
 
@@ -76,11 +76,11 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     }
 
     public void onSearchQueryDismissed() {
-        mRxQuery.changeQueryText("");
+        mQueryManager.changeQueryText("");
     }
 
     public void onSearchQuerySubmitted(String query) {
-        mRxQuery.changeQueryText(query);
+        mQueryManager.changeQueryText(query);
     }
 
     @Override

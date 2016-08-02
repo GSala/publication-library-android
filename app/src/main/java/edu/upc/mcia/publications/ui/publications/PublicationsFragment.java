@@ -113,7 +113,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
 
         RxSearchView.queryTextChangeEvents(searchView)
                 .filter(SearchViewQueryTextEvent::isSubmitted)
-                .map(query -> query.toString().trim())
+                .map(query -> query.queryText().toString().trim())
                 .subscribe(query -> mPresenter.onSearchQuerySubmitted(query));
 
         super.onCreateOptionsMenu(menu, inflater);
