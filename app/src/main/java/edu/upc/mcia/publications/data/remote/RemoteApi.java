@@ -26,6 +26,8 @@ public interface RemoteApi {
     Observable<Publisher> getPublisher(@Path("id") String id);
 
     @GET("publications")
-    Observable<Page<PublicationDto>> getPublications(@Query("page") int pageNumber);
+    Observable<Page<PublicationDto>> getPublications(
+            @Query("page") int pageNumber,
+            @Query("q") String query);
 
 }

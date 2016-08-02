@@ -9,7 +9,7 @@ public interface PublicationsMvpView extends MvpView {
 
     void addPublications(List<Publication> pubs);
 
-    void clearPublications(List<Publication> pubs);
+    void clearPublications();
 
     void showLoadingIndicator(boolean show);
 

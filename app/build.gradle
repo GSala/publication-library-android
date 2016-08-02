@@ -50,6 +50,7 @@ dependencies {
     compile 'com.artemzin.rxjava:proguard-rules:1.1.7.0'
 
     compile 'com.jakewharton.timber:timber:4.1.2'
+    compile "com.jakewharton.rxbinding:rxbinding:$RXBINDINGS_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$RXBINDINGS_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RXBINDINGS_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-support-v4:$RXBINDINGS_VERSION"

@@ -4,16 +4,25 @@ package edu.upc.mcia.publications.ui.publications;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.support.v4.view.RxMenuItemCompat;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding.support.v7.widget.SearchViewQueryTextEvent;
+import com.jakewharton.rxbinding.view.MenuItemActionViewEvent;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +56,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         super.onCreate(savedInstanceState);
 
         mPresenter = new PublicationsPresenter();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -91,6 +101,25 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_publications, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        RxMenuItemCompat.actionViewEvents(searchItem)
+                .filter(event -> event.kind().equals(MenuItemActionViewEvent.Kind.COLLAPSE))
+                .subscribe(event -> mPresenter.onSearchQueryDismissed());
+
+
+        RxSearchView.queryTextChangeEvents(searchView)
+                .filter(SearchViewQueryTextEvent::isSubmitted)
+                .map(query -> query.toString().trim())
+                .subscribe(query -> mPresenter.onSearchQuerySubmitted(query));
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -103,9 +132,8 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
     }
 
     @Override
-    public void clearPublications(List<Publication> pubs) {
-        Timber.d("Publications received: " + pubs.size());
-        mAdapter.clearData(pubs);
+    public void clearPublications() {
+        mAdapter.clearData();
     }
 
     @Override

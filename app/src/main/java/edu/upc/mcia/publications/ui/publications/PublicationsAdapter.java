@@ -50,7 +50,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         mDataset.addAll(pubs);
     }
 
-    public void clearData(List<Publication> pubs) {
+    public void clearData() {
         mDataset.clear();
     }
 
