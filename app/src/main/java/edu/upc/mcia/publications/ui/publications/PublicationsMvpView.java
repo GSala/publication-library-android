@@ -15,4 +15,6 @@ public interface PublicationsMvpView extends MvpView {
 
     void setPageIndicator(int pageNumber, int totalPages);
 
+    void showFilterDialog();
+
 }

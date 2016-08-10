@@ -83,6 +83,14 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
         mQueryManager.changeQueryText(query);
     }
 
+    public void onFilterMenuClicked() {
+        getMvpView().showFilterDialog();
+    }
+
+    public void onFilterApplied() {
+
+    }
+
     @Override
     public void detachView() {
         super.detachView();

@@ -120,6 +120,17 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                mPresenter.onFilterMenuClicked();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -149,4 +160,9 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         mPageIndicator.setText(pageNumber + " / " + totalPages);
     }
 
+    @Override
+    public void showFilterDialog() {
+        FilterDialog filterDialog = new FilterDialog();
+        filterDialog.show(getFragmentManager(), filterDialog.getTag());
+    }
 }
