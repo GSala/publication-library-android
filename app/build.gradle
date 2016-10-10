@@ -3,7 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.3"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '24.1.0'
+    final SUPPORT_LIBRARY_VERSION = '24.2.1'
     final RETROFIT_VERSION = '2.1.0'
     final RXBINDINGS_VERSION = '0.4.0'
 
@@ -45,9 +45,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
-    compile 'io.reactivex:rxjava:1.1.7'
+    compile 'io.reactivex:rxjava:1.2.1'
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.artemzin.rxjava:proguard-rules:1.1.7.0'
+    compile 'com.artemzin.rxjava:proguard-rules:1.2.1.0'
 
     compile 'com.jakewharton.timber:timber:4.1.2'
     compile "com.jakewharton.rxbinding:rxbinding:$RXBINDINGS_VERSION"
@@ -55,9 +55,9 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RXBINDINGS_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-support-v4:$RXBINDINGS_VERSION"
 
-    compile 'com.jonathanfinerty.once:once:1.0.3'
+    compile 'com.jonathanfinerty.once:once:1.2.1'
 
-    provided "org.projectlombok:lombok:1.12.6"
+    provided "org.projectlombok:lombok:1.16.10"
 
     testCompile 'junit:junit:4.12'
 }
