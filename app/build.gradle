@@ -57,7 +57,5 @@ dependencies {
 
     compile 'com.jonathanfinerty.once:once:1.2.1'
 
-    provided "org.projectlombok:lombok:1.16.10"
-
     testCompile 'junit:junit:4.12'
 }
