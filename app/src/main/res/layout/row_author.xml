@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="56dp"
     android:foreground="?android:attr/selectableItemBackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -16,29 +16,14 @@
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical"
         android:paddingLeft="72dp"
-        android:paddingRight="16dp">
-
-        <TextView
-            android:id="@+id/textPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            tools:text="Aaron Rodgers" />
-
-        <TextView
-            android:id="@+id/textSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="PhD Student" />
-    </LinearLayout>
+        android:paddingRight="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        tools:text="Aaron Rodgers" />
 
 </FrameLayout>

@@ -58,8 +58,6 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
 
         // Replace contents of the view
         holder.primaryText.setText(author.getFullname());
-        holder.secondaryText.setText(author.getEmail());
-
         Glide.with(holder.root.getContext())
                 .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))
                 .dontAnimate()
@@ -98,14 +96,12 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
 
         public View root;
         public TextView primaryText;
-        public TextView secondaryText;
         public ImageView image;
 
         public ViewHolder(View v) {
             super(v);
             root = v.findViewById(R.id.root);
             primaryText = (TextView) v.findViewById(R.id.textPrimary);
-            secondaryText = (TextView) v.findViewById(R.id.textSecondary);
             image = (ImageView) v.findViewById(R.id.image);
         }
     }
@@ -121,7 +117,7 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
             Observable.from(mOriginalData)
                     .filter(author -> author.getFullname().toLowerCase().contains(filterString))
                     .toSortedList()
-                    .subscribe(filteredData -> newList.addAll(filteredData));
+                    .subscribe(newList::addAll);
 
             results.values = newList;
             results.count = newList.size();
