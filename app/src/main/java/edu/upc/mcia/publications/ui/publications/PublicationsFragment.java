@@ -15,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v4.view.RxMenuItemCompat;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
@@ -29,9 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Publication;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -139,4 +136,8 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         mRefreshLayout.setRefreshing(show);
     }
 
+    @Override
+    public void showLoadingMoreIndicator(boolean show) {
+        mAdapter.showLoadingMore(show);
+    }
 }

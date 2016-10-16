@@ -16,8 +16,6 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     private Subscription mSubscription;
     private int totalPages;
     private int lastPageLoaded;
-    private int totalPublications;
-    private String textQuery = "";
 
     public PublicationsPresenter() {
         mPublicationRepository = PublicationRepository.getInstance();
@@ -41,21 +39,24 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
 
     private void loadPublications(int pageNumber, PublicationQuery query) {
         checkViewAttached();
-        getMvpView().showLoadingIndicator(true);
+        getMvpView().showLoadingMoreIndicator(true);
         Timber.d("Loading publications. Page " + (pageNumber + 1) + "/" + totalPages);
 
         mSubscription = mPublicationRepository.search(pageNumber, query.getQuery())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(() -> getMvpView().showLoadingIndicator(false))
                 .subscribe(
                         page -> {
+                            getMvpView().showLoadingMoreIndicator(false);
+                            Timber.d("Received publications");
                             getMvpView().addPublications(page.getContent());
                             totalPages = page.getMetadata().getTotalPages();
-                            totalPublications = (int) page.getMetadata().getTotalElements();
                             lastPageLoaded = page.getMetadata().getPage();
                         },
-                        error -> Timber.e(error, error.getMessage()));
+                        error -> {
+                            getMvpView().showLoadingMoreIndicator(false);
+                            Timber.e(error, error.getMessage());
+                        });
     }
 
     public void onScroll(int firstVisibleItem, int totalItems) {

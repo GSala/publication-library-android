@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,10 +21,15 @@ import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.model.Publication;
 import edu.upc.mcia.publications.data.remote.ApiManager;
 
-public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapter.ViewHolder> implements View.OnClickListener {
+public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+
+    private static final int TYPE_PUBLICATION = 1;
+    private static final int TYPE_LOADING = 2;
 
     private OnPublicationClickListener onPublicationClickListener;
     private OnAuthorClickListener onAuthorClickListener;
+
+    private boolean showLoadingMore = false;
 
     private SortedList<Publication> mDataset;
 
@@ -54,18 +60,50 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         mDataset.clear();
     }
 
-    // Create new views (invoked by the layout manager)
-    @Override
-    public PublicationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_publication, parent, false);
-        return new ViewHolder(v);
+    public void showLoadingMore(boolean loading) {
+        if (showLoadingMore == loading) return;
+        showLoadingMore = loading;
+        if (loading) {
+            notifyItemInserted(getLoadingMoreItemPosition());
+        } else {
+            notifyItemRemoved(getLoadingMoreItemPosition());
+        }
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    private int getLoadingMoreItemPosition() {
+        return showLoadingMore ? getItemCount() - 1 : RecyclerView.NO_POSITION;
+    }
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case TYPE_PUBLICATION:
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_publication, parent, false);
+                return new PublicationViewHolder(v);
+            case TYPE_LOADING:
+                View v2 = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.row_loading, parent, false);
+                return new LoadingViewHolder(v2);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case TYPE_PUBLICATION:
+                bindPublicationViewHolder((PublicationViewHolder) holder, position);
+                break;
+            case TYPE_LOADING:
+                bindLoadingViewHolder((LoadingViewHolder) holder);
+                break;
+        }
+    }
+
+
+    // Replace the contents of a view (invoked by the layout manager)
+    private void bindPublicationViewHolder(PublicationViewHolder holder, int position) {
         // Get elements from dataset
         Publication pub = mDataset.get(position);
         Author author = pub.getAuthors().get(0);
@@ -92,15 +130,29 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         holder.subtitle.setText(pub.getPublisher().getAcronym() + "  -  " + dateString);
         holder.summary.setText(pub.getSummary());
 
-
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    private void bindLoadingViewHolder(LoadingViewHolder holder) {
+        holder.progress.setVisibility(showLoadingMore ? View.VISIBLE : View.INVISIBLE);
+    }
+
     @Override
     public int getItemCount() {
+        return getDataItemCount() + (showLoadingMore ? 1 : 0);
+    }
+
+    private int getDataItemCount() {
         return mDataset != null ? mDataset.size() : 0;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (position < getDataItemCount()) {
+            return TYPE_PUBLICATION;
+        } else {
+            return TYPE_LOADING;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -120,7 +172,8 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         }
     }
 
-    public void setOnPublicationClickListener(OnPublicationClickListener onPublicationClickListener) {
+    public void setOnPublicationClickListener(OnPublicationClickListener
+                                                      onPublicationClickListener) {
         this.onPublicationClickListener = onPublicationClickListener;
     }
 
@@ -136,8 +189,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         void onAuthorClick(View v, Author author);
     }
 
-    // Provide a reference to the views for each data item
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class PublicationViewHolder extends RecyclerView.ViewHolder {
 
         public View root;
         public View publication;
@@ -149,7 +201,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
         public TextView subtitle;
         public TextView summary;
 
-        public ViewHolder(View v) {
+        public PublicationViewHolder(View v) {
             super(v);
             root = v.findViewById(R.id.root);
             publication = v.findViewById(R.id.publication);
@@ -161,6 +213,17 @@ public class PublicationsAdapter extends RecyclerView.Adapter<PublicationsAdapte
             subtitle = (TextView) v.findViewById(R.id.subtitle);
             summary = (TextView) v.findViewById(R.id.summary);
         }
+    }
+
+    static class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        ProgressBar progress;
+
+        LoadingViewHolder(View itemView) {
+            super(itemView);
+            progress = (ProgressBar) itemView;
+        }
+
     }
 
 }

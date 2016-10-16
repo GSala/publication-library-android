@@ -13,5 +13,5 @@ public interface PublicationsMvpView extends MvpView {
 
     void showLoadingIndicator(boolean show);
 
-
+    void showLoadingMoreIndicator(boolean show);
 }
