@@ -62,7 +62,6 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
         if (firstVisibleItem >= totalItems - 2) {
             onScrollReachedBottom();
         }
-        getMvpView().setPageIndicator(firstVisibleItem + 1, totalPublications);
     }
 
     private void onScrollReachedBottom() {

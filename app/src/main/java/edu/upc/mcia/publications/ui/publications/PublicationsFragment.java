@@ -43,7 +43,6 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
 
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
-    private TextView mPageIndicator;
     private LinearLayoutManager mLayoutManager;
     private PublicationsAdapter mAdapter;
 
@@ -66,7 +65,6 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
         View view = inflater.inflate(R.layout.fragment_publications, container, false);
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mPageIndicator = (TextView) view.findViewById(R.id.pageIndicator);
 
         mRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
@@ -138,15 +136,7 @@ public class PublicationsFragment extends Fragment implements PublicationsMvpVie
 
     @Override
     public void showLoadingIndicator(boolean show) {
-        Observable.just(show)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(RxSwipeRefreshLayout.refreshing(mRefreshLayout));
-    }
-
-    @Override
-    public void setPageIndicator(int pageNumber, int totalPages) {
-        mPageIndicator.setText(pageNumber + " / " + totalPages);
+        mRefreshLayout.setRefreshing(show);
     }
 
 }
