@@ -9,4 +9,6 @@ import edu.upc.mcia.publications.ui.MvpView;
 public interface AuthorsMvpView extends MvpView {
 
     void showAuthors(List<Author> authors);
+
+    void filterAuthors(String query);
 }

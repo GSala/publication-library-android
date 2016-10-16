@@ -5,6 +5,7 @@ import edu.upc.mcia.publications.ui.BasePresenter;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class AuthorsPresenter extends BasePresenter<AuthorsMvpView> {
 
@@ -27,7 +28,22 @@ public class AuthorsPresenter extends BasePresenter<AuthorsMvpView> {
         mSubscription = mAuthorRepository.findAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(authors -> getMvpView().showAuthors(authors));
+                .subscribe(
+                        authors -> {
+                            getMvpView().showAuthors(authors);
+                            getMvpView().filterAuthors("");
+                        },
+                        error -> Timber.e(error.getMessage()));
+    }
+
+    public void onSearchQueryDismissed() {
+        Timber.v("onSearchQueryDismissed");
+        getMvpView().filterAuthors("");
+    }
+
+    public void onSearchQuerySubmitted(String query) {
+        Timber.v("onSearchQuerySubmitted");
+        getMvpView().filterAuthors(query);
     }
 
     @Override

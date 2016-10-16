@@ -15,7 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jakewharton.rxbinding.support.v4.view.RxMenuItemCompat;
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding.support.v7.widget.SearchViewQueryTextEvent;
+import com.jakewharton.rxbinding.view.MenuItemActionViewEvent;
 
 import java.util.List;
 
@@ -75,8 +78,16 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
         inflater.inflate(R.menu.menu_authors, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        RxSearchView.queryTextChanges(searchView)
-                .subscribe(query -> mAdapter.getFilter().filter(query));
+
+        RxMenuItemCompat.actionViewEvents(searchItem)
+                .filter(event -> event.kind().equals(MenuItemActionViewEvent.Kind.COLLAPSE))
+                .subscribe(event -> mPresenter.onSearchQueryDismissed());
+
+        RxSearchView.queryTextChangeEvents(searchView)
+                .filter(SearchViewQueryTextEvent::isSubmitted)
+                .map(query -> query.queryText().toString().trim())
+                .subscribe(query -> mPresenter.onSearchQuerySubmitted(query));
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -90,5 +101,10 @@ public class AuthorsFragment extends Fragment implements AuthorsMvpView {
     public void showAuthors(List<Author> authors) {
         Timber.d("Received authors");
         mAdapter.setData(authors);
+    }
+
+    @Override
+    public void filterAuthors(String query) {
+        mAdapter.getFilter().filter(query);
     }
 }
