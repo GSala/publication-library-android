@@ -3,7 +3,6 @@ package edu.upc.mcia.publications.ui.publications;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-import edu.upc.mcia.publications.App;
 import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.model.Publication;
@@ -32,6 +31,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean showLoadingMore = false;
 
     private SortedList<Publication> mDataset;
+    private SimpleDateFormat mDateFormat;
 
     public PublicationsAdapter() {
         mDataset = new SortedList<>(Publication.class, new SortedListAdapterCallback<Publication>(this) {
@@ -50,6 +50,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return item1.equals(item2);
             }
         });
+        mDateFormat = new SimpleDateFormat("MMMM yyyy");
     }
 
     public void addData(List<Publication> pubs) {
@@ -124,9 +125,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         holder.title.setText(pub.getTitle());
 
-        String dateString = DateUtils.formatDateTime(App.getContext(),
-                pub.getPublishDate().getTime(),
-                DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
+        String dateString = mDateFormat.format(pub.getPublishDate());
         holder.subtitle.setText(pub.getPublisher().getAcronym() + "  -  " + dateString);
         holder.summary.setText(pub.getSummary());
 
