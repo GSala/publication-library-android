@@ -15,7 +15,6 @@ import edu.upc.mcia.publications.R;
 import edu.upc.mcia.publications.data.model.Publisher;
 import rx.Observable;
 import rx.observables.GroupedObservable;
-import timber.log.Timber;
 
 public class PublishersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
@@ -43,8 +42,10 @@ public class PublishersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private void insertOrderedDataset(List<Publisher> updates) {
         Observable.from(updates)
-                .toSortedList((p1, p2) -> p1.getType().compareTo(p2.getType()), updates.size())
-                .subscribe(list -> mDataset.addAll(list));
+                .groupBy(p -> p.getType())
+                .sorted((group1, group2) -> group1.getKey().compareTo(group2.getKey()))
+                .concatMap(go -> go.sorted((p1, p2) -> p1.getAcronym().compareTo(p2.getAcronym())))
+                .subscribe(list -> mDataset.add(list));
     }
 
     private void extractHeaders(List<Publisher> publishers) {
@@ -105,7 +106,6 @@ public class PublishersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         // Replace contents of the view
         holder.name.setText(publisher.getFullname());
         holder.acronym.setText(publisher.getAcronym());
-        holder.type.setText("#" + publisher.getType());
     }
 
     private void bindHeaderViewHolder(HeaderViewHolder holder, int position) {
@@ -173,14 +173,12 @@ public class PublishersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public View root;
         public TextView name;
         public TextView acronym;
-        public TextView type;
 
         public PublisherViewHolder(View v) {
             super(v);
             root = v.findViewById(R.id.root);
             name = (TextView) v.findViewById(R.id.name);
             acronym = (TextView) v.findViewById(R.id.acronym);
-            type = (TextView) v.findViewById(R.id.type);
         }
     }
 
