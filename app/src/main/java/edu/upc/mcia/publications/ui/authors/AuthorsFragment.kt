@@ -60,6 +60,7 @@ class AuthorsFragment : BaseFragment() {
         if (model.authorQuery.isNotBlank()) {
             searchItem.expandActionView()
             searchView.setQuery(model.authorQuery, false)
+            searchView.clearFocus()
         }
 
         RxMenuItemCompat.actionViewEvents(searchItem)
@@ -69,7 +70,7 @@ class AuthorsFragment : BaseFragment() {
         RxSearchView.queryTextChangeEvents(searchView)
                 .filter({ it.isSubmitted })
                 .map { it.queryText().toString().trim { it <= ' ' } }
-                .subscribe { model.authorQuery = it }
+                .subscribe { model.authorQuery = it; searchView.clearFocus() }
 
         super.onCreateOptionsMenu(menu, inflater)
     }
