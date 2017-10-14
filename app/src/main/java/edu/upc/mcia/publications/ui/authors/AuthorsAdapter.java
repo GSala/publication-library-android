@@ -60,7 +60,6 @@ public class AuthorsAdapter extends RecyclerView.Adapter<AuthorsAdapter.ViewHold
         holder.primaryText.setText(author.getFullname());
         Glide.with(holder.root.getContext())
                 .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))
-                .dontAnimate()
                 .into(holder.image);
     }
 

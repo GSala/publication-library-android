@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -12,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId "edu.upc.mcia.publications"
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion 21
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -23,39 +23,49 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-    final SUPPORT_LIBRARY_VERSION = '25.0.0'
+    final SUPPORT_LIBRARY_VERSION = '26.1.0'
     final RETROFIT_VERSION = '2.1.0'
-    final RXBINDINGS_VERSION = '0.4.0'
+    final RXBINDINGS_VERSION = '1.0.1'
 
-    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-    compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-    compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
+    implementation "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
+    implementation "com.android.support:support-v4:$SUPPORT_LIBRARY_VERSION"
 
-    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
 
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.squareup.sqlbrite:sqlbrite:0.7.0'
 
-    compile 'io.reactivex:rxjava:1.2.1'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.artemzin.rxjava:proguard-rules:1.2.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    compile 'com.jakewharton.timber:timber:4.1.2'
-    compile "com.jakewharton.rxbinding:rxbinding:$RXBINDINGS_VERSION"
-    compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$RXBINDINGS_VERSION"
-    compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RXBINDINGS_VERSION"
-    compile "com.jakewharton.rxbinding:rxbinding-support-v4:$RXBINDINGS_VERSION"
+    implementation 'io.reactivex:rxjava:1.3.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.artemzin.rxjava:proguard-rules:1.2.9.0'
 
-    compile 'com.jonathanfinerty.once:once:1.2.1'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation "com.jakewharton.rxbinding:rxbinding:$RXBINDINGS_VERSION"
+    implementation "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$RXBINDINGS_VERSION"
+    implementation "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RXBINDINGS_VERSION"
+    implementation "com.jakewharton.rxbinding:rxbinding-support-v4:$RXBINDINGS_VERSION"
+
+    implementation 'com.jonathanfinerty.once:once:1.2.2'
 
     testCompile 'junit:junit:4.12'
 }
+

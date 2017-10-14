@@ -120,7 +120,6 @@ public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.secondaryText.setText(author.getEmail());
         Glide.with(holder.root.getContext())
                 .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))
-                .dontAnimate()
                 .into(holder.image);
 
         holder.title.setText(pub.getTitle());
