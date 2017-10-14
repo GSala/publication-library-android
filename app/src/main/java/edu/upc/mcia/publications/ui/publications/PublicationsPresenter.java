@@ -3,9 +3,9 @@ package edu.upc.mcia.publications.ui.publications;
 import edu.upc.mcia.publications.data.repository.PublicationQuery;
 import edu.upc.mcia.publications.data.repository.PublicationRepository;
 import edu.upc.mcia.publications.ui.BasePresenter;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
@@ -13,7 +13,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     private final PublicationRepository mPublicationRepository;
     private final QueryManager mQueryManager;
 
-    private Subscription mSubscription;
+    private Disposable mSubscription;
     private int totalPages;
     private int lastPageLoaded;
 
@@ -66,7 +66,7 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     }
 
     private void onScrollReachedBottom() {
-        if (mSubscription.isUnsubscribed() && (lastPageLoaded < totalPages - 1)) {
+        if (mSubscription.isDisposed() && (lastPageLoaded < totalPages - 1)) {
             loadPublications(lastPageLoaded + 1, mQueryManager.getQuery());
         }
     }
@@ -87,8 +87,8 @@ public class PublicationsPresenter extends BasePresenter<PublicationsMvpView> {
     public void detachView() {
         super.detachView();
 
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
+        if (mSubscription != null && !mSubscription.isDisposed()) {
+            mSubscription.dispose();
         }
     }
 }

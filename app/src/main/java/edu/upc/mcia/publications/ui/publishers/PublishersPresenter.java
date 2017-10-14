@@ -2,15 +2,15 @@ package edu.upc.mcia.publications.ui.publishers;
 
 import edu.upc.mcia.publications.data.repository.PublisherRepository;
 import edu.upc.mcia.publications.ui.BasePresenter;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class PublishersPresenter extends BasePresenter<PublishersMvpView> {
 
     private PublisherRepository mPublisherRepository;
 
-    private Subscription mSubscription;
+    private Disposable mSubscription;
 
     public PublishersPresenter() {
         mPublisherRepository = PublisherRepository.getInstance();
@@ -35,8 +35,8 @@ public class PublishersPresenter extends BasePresenter<PublishersMvpView> {
     public void detachView() {
         super.detachView();
 
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
+        if (mSubscription != null && !mSubscription.isDisposed()) {
+            mSubscription.dispose();
         }
     }
 }

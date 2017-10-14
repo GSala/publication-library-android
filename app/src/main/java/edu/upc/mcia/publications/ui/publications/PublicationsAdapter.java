@@ -116,7 +116,7 @@ public class PublicationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         holder.author.setOnClickListener(this);
 
         // Replace contents of the view
-        holder.primaryText.setText(author.getFullname());
+        holder.primaryText.setText(author.getName());
         holder.secondaryText.setText(author.getEmail());
         Glide.with(holder.root.getContext())
                 .load(String.format(ApiManager.IMAGE_BASE_URL, author.getPhoto()))

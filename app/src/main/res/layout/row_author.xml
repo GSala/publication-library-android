@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:foreground="?android:attr/selectableItemBackground">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="12dp"
-        app:civ_border_color="#FF000000"
-        app:civ_border_width="0dp" />
+    <data>
 
-    <TextView
-        android:id="@+id/textPrimary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="72dp"
-        android:paddingRight="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        tools:text="Aaron Rodgers" />
+        <variable
+            name="author"
+            type="edu.upc.mcia.publications.data.model.Author"/>
 
-</FrameLayout>
+    </data>
+
+    <FrameLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            app:circularImageUrl="@{author.photo}"/>
+
+        <TextView
+            android:id="@+id/textPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="72dp"
+            android:paddingRight="16dp"
+            android:text="@{author.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="Aaron Rodgers"/>
+
+    </FrameLayout>
+</layout>

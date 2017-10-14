@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializer;
 import java.util.Date;
 
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
@@ -27,7 +27,7 @@ public class ApiManager {
     private static final Retrofit RETROFIT =
             new Retrofit.Builder()
                     .baseUrl(API_BASE_URL)
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(GSON))
                     .build();
 

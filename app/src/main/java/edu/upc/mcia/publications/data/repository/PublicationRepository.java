@@ -7,7 +7,7 @@ import edu.upc.mcia.publications.data.model.Publication;
 import edu.upc.mcia.publications.data.remote.ApiManager;
 import edu.upc.mcia.publications.data.remote.dto.Page;
 import edu.upc.mcia.publications.data.remote.dto.PublicationDto;
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class PublicationRepository {
 
@@ -35,7 +35,7 @@ public class PublicationRepository {
 
     private Observable<Page<Publication>> fillPublication(Page<PublicationDto> pageDto) {
         return Observable
-                .from(pageDto.getContent())
+                .fromIterable(pageDto.getContent())
                 .concatMap(dto ->
                         Observable.zip(
                                 getAuthors(dto.getAuthorIds()),
@@ -43,14 +43,15 @@ public class PublicationRepository {
                                 (authors, publisher) -> Publication.from(dto, authors, publisher)))
 
                 .toList()
+                .toObservable()
                 .map(list -> new Page<>(list, pageDto.getMetadata()));
     }
 
     private Observable<List<Author>> getAuthors(List<String> ids) {
         return Observable
-                .from(ids)
+                .fromIterable(ids)
                 .concatMap(mAuthorRepository::findById)
-                .toList();
+                .toList().toObservable();
     }
 
 }

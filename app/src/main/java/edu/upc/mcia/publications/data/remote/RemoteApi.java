@@ -6,10 +6,10 @@ import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.model.Publisher;
 import edu.upc.mcia.publications.data.remote.dto.Page;
 import edu.upc.mcia.publications.data.remote.dto.PublicationDto;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 public interface RemoteApi {
 

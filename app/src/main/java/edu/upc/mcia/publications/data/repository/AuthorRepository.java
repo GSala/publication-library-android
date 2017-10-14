@@ -6,7 +6,7 @@ import java.util.Map;
 
 import edu.upc.mcia.publications.data.model.Author;
 import edu.upc.mcia.publications.data.remote.ApiManager;
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class AuthorRepository {
     private static AuthorRepository INSTANCE = null;
@@ -26,11 +26,11 @@ public class AuthorRepository {
     public Observable<List<Author>> findAll() {
         if (mData.isEmpty()) {
             return ApiManager.getRemoteApi().getAuthors()
-                    .concatMap(Observable::from)
+                    .concatMap(Observable::fromIterable)
                     .doOnNext(a -> mData.put(a.getId(), a))
-                    .toList();
+                    .toList().toObservable();
         } else {
-            return Observable.from(mData.values()).toList();
+            return Observable.fromIterable(mData.values()).toList().toObservable();
         }
     }
 
