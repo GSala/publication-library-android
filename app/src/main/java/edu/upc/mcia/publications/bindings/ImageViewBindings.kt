@@ -1,4 +1,4 @@
-package dk.shape.flock2.bindings
+package edu.upc.mcia.publications.bindings
 
 import android.databinding.BindingAdapter
 import android.widget.ImageView
@@ -8,15 +8,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import edu.upc.mcia.publications.data.remote.ApiManager
 
-/**
- *
- * Flock2
- * ImageViewBindings
- *
- * Created on 01/07/2017
- * Copyright (c) 2017 SHAPE A/S. All rights reserved.
- *
- */
 object ImageViewBindings {
 
     @JvmStatic

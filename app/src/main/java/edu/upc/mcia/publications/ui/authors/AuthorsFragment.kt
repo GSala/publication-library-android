@@ -3,22 +3,21 @@ package edu.upc.mcia.publications.ui.authors
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.MenuItemCompat
-import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
-import com.jakewharton.rxbinding.support.v4.view.RxMenuItemCompat
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView
-import com.jakewharton.rxbinding.view.MenuItemActionViewEvent
+import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import edu.upc.mcia.publications.BR
 import edu.upc.mcia.publications.R
 import edu.upc.mcia.publications.data.model.Author
 import edu.upc.mcia.publications.databinding.FragmentAuthorsBinding
-import edu.upc.mcia.publications.ui.BaseFragment
-import edu.upc.mcia.publications.ui.bindingProvider
-import edu.upc.mcia.publications.ui.viewModelProvider
-import me.tatarka.bindingcollectionadapter2.ItemBinding
+import edu.upc.mcia.publications.ui.base.BaseFragment
+import edu.upc.mcia.publications.ui.base.BaseItem
+import edu.upc.mcia.publications.ui.base.BaseItemBinding
+import edu.upc.mcia.publications.ui.base.BaseItemDiffCallback
+import edu.upc.mcia.publications.ui.common.ErrorItem
+import edu.upc.mcia.publications.ui.common.LoadingItem
+import edu.upc.mcia.publications.ui.utils.bindingProvider
+import edu.upc.mcia.publications.ui.utils.viewModelProvider
+import me.tatarka.bindingcollectionadapter2.OnItemBind
 import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 
 /**
@@ -29,53 +28,46 @@ class AuthorsFragment : BaseFragment() {
     override val binding: FragmentAuthorsBinding by bindingProvider(R.layout.fragment_authors, BR.authorsFragment to this)
     private val model by viewModelProvider { AuthorsViewModel() }
 
-    val itemBinding: ItemBinding<Author> = ItemBinding.of<Author>(BR.author, R.layout.row_author)
-    val items: DiffObservableList<Author> = DiffObservableList(object : DiffObservableList.Callback<Author> {
-        override fun areItemsTheSame(oldItem: Author, newItem: Author): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Author, newItem: Author): Boolean {
-            return oldItem == newItem
-        }
-    })
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setHasOptionsMenu(true)
-    }
+    val itemBinding: OnItemBind<BaseItem> = BaseItemBinding()
+    val items: DiffObservableList<BaseItem> = DiffObservableList(BaseItemDiffCallback())
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.authors.observe(this, Observer { showAuthors(it) })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_authors, menu)
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
-
-        if (model.authorQuery.isNotBlank()) {
-            searchItem.expandActionView()
-            searchView.setQuery(model.authorQuery, false)
-            searchView.clearFocus()
-        }
-
-        RxMenuItemCompat.actionViewEvents(searchItem)
-                .filter { event -> event.kind() == MenuItemActionViewEvent.Kind.COLLAPSE }
-                .subscribe { model.authorQuery = "" }
-
-        RxSearchView.queryTextChangeEvents(searchView)
-                .filter({ it.isSubmitted })
+        binding.searchView.queryTextChangeEvents()
                 .map { it.queryText().toString().trim { it <= ' ' } }
-                .subscribe { model.authorQuery = it; searchView.clearFocus() }
-
-        super.onCreateOptionsMenu(menu, inflater)
+                .startWith("")
+                .subscribe { model.uiEvents.accept(AuthorsViewModel.UiEvent.QueryChange(it)) }
     }
 
-    private fun showAuthors(authors: List<Author>?) {
-        items.update(authors.orEmpty())
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        model.uiState.observe(this, Observer {
+            if (it!!.loading) items.update(listOf(LoadingItem()))
+            if (it.error != null) items.update(listOf(ErrorItem(it.error.message, { model.uiEvents.accept(it.error.trigger) })))
+            showAuthors(it.authors)
+        })
+    }
+
+    private fun showAuthors(authors: List<Author>) {
+        val listItems = mutableListOf<BaseItem>()
+
+        listItems += authors
+                .filter { it.status == "member" }
+                .map { AuthorItem(it) }
+                .sortedBy { it.sortingName }
+                .also { if (it.isNotEmpty()) listItems += AuthorHeaderItem("Members") }
+
+        listItems += authors
+                .filter { it.status == "external" }
+                .map { AuthorItem(author = it, showAvatar = false) }
+                .sortedBy { it.sortingName }
+                .also { if (it.isNotEmpty()) listItems += AuthorHeaderItem("External") }
+
+        if (listItems.isEmpty()) listItems += AuthorEmptyItem()
+
+        items.update(listItems)
+        binding.recyclerView.scrollToPosition(0)
     }
 }

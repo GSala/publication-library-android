@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="edu.upc.mcia.publications.ui.common.IconWithTextItem"/>
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/publisherIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@{viewModel.icon}"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/publisherHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@{viewModel.primaryText}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/publisherIcon"
+            app:layout_constraintTop_toTopOf="@+id/publisherIcon"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autoLink="all"
+            android:text="@{viewModel.secondaryText}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textIsSelectable="true"
+            app:layout_constraintEnd_toEndOf="@+id/publisherHeader"
+            app:layout_constraintStart_toStartOf="@+id/publisherHeader"
+            app:layout_constraintTop_toBottomOf="@id/publisherHeader"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -27,7 +27,7 @@ public class PublisherRepository {
 
     public Observable<List<Publisher>> findAll() {
         if (mData.isEmpty()) {
-            return ApiManager.getRemoteApi().getPublishers()
+            return ApiManager.INSTANCE.getRemoteApi().getPublishers()
                     .concatMap(Observable::fromIterable)
                     .doOnNext(p -> mData.put(p.getId(), p))
                     .toList().toObservable();
@@ -38,7 +38,7 @@ public class PublisherRepository {
 
     public Observable<Publisher> findById(String id) {
         if (!mData.containsKey(id)) {
-            return ApiManager.getRemoteApi().getPublisher(id)
+            return ApiManager.INSTANCE.getRemoteApi().getPublisher(id)
                     .doOnNext(p -> mData.put(p.getId(), p));
         } else {
             return Observable.just(mData.get(id));

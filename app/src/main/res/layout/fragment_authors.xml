@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers" />
+        <import type="me.tatarka.bindingcollectionadapter2.LayoutManagers"/>
 
         <variable
             name="authorsFragment"
@@ -12,22 +12,42 @@
 
     </data>
 
-    <FrameLayout
+    <android.support.design.internal.ScrimInsetsFrameLayout
+        style="@style/Widget.Design.NavigationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         tools:context="edu.upc.mcia.publications.ui.authors.AuthorsFragment">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:clipToPadding="false"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
-            app:itemBinding="@{authorsFragment.itemBinding}"
-            app:items="@{authorsFragment.items}"
-            app:layoutManager="@{LayoutManagers.linear()}"/>
+            android:layout_height="match_parent">
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:queryBackground="@android:color/transparent"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingBottom="8dp"
+                    app:itemBinding="@{authorsFragment.itemBinding}"
+                    app:items="@{authorsFragment.items}"
+                    app:layoutManager="@{LayoutManagers.linear()}"/>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.internal.ScrimInsetsFrameLayout>
 </layout>
